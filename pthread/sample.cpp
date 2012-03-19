@@ -1,56 +1,57 @@
 #include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
-#define NUM_THREADS	4
+#define NTHREADS 4
+#define N 1000
+#define MEGEXTRA 1000000
 
-void *BusyWork(void *t)
+pthread_attr_t attr;
+
+void *dowork(void *threadid)
 {
-	int i;
+	double A[N][N];
+	int i, j;
 	long tid;
-	double result=0.0;
-	tid = (long)t;
-	printf("Thread %ld starting...\n",tid);
-	for (i=0; i<1000000; i++)
+	size_t mystacksize;
+	
+	tid = (long)threadid;
+	pthread_attr_getstacksize (&attr, &mystacksize);
+	printf("Thread %ld: stack size = %u bytes \n", tid, mystacksize);
+	for (i = 0; i < N; ++i)
 	{
-		result = result + sin(i) * tan(i);
+		for (j = 0; j < N; ++j)
+		{
+			A[i][j] = ((i*j)/3.452) + (N-i);
+		}
 	}
-	printf("Thread %ld done. Result = %e\n",tid, result);
-	pthread_exit((void*) t);
+	pthread_exit(NULL);
 }
 
-int main (int argc, char *argv[])
+int main(int argc, char *argv[])
 {
-	pthread_t thread[NUM_THREADS];
-	pthread_attr_t attr;
+	pthread_t threads[NTHREADS];
+	size_t stacksize;
 	int rc;
 	long t;
-	void *status;
 	
-	/* Initialize and set thread detached attribute */
 	pthread_attr_init(&attr);
-	pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
-	
-	for(t=0; t<NUM_THREADS; t++) {
-		printf("Main: creating thread %ld\n", t);
-		rc = pthread_create(&thread[t], &attr, BusyWork, (void *)t);
-		if (rc) {
-			printf("ERROR; return code from pthread_create() is %d\n", rc);
+	pthread_attr_getstacksize (&attr, &stacksize);
+	printf("Default stack size = %u\n", stacksize);
+	stacksize = sizeof(double)*N*N+MEGEXTRA;
+	printf("Amount of stack needed per thread = %u\n",stacksize);
+	pthread_attr_setstacksize (&attr, stacksize);
+	printf("Creating threads with stack size = %u bytes\n",stacksize);
+	for(t = 0; t < NTHREADS; ++t)
+	{
+		rc = pthread_create(&threads[t], &attr, dowork, (void *)t);
+		if (rc)
+		{
+			printf("return code from pthread_create() is %d\n", rc);
 			exit(-1);
 		}
 	}
-	
-	/* Free attribute and wait for the other threads */
-	pthread_attr_destroy(&attr);
-	for(t=0; t<NUM_THREADS; t++) {
-		rc = pthread_join(thread[t], &status);
-		if (rc) {
-			printf("ERROR; return code from pthread_join() is %d\n", rc);
-			exit(-1);
-		}
-		printf("Main: completed join with thread %ld having a status of %ld\n",t,(long)status);
-	}
-
-	printf("Main: program completed. Exiting.\n");
+	printf("Created %ld threads.\n", t);
 	pthread_exit(NULL);
+
+	return 0;
 }

@@ -1,7 +1,14 @@
 ################################################################
-# Makefile for building: ALL_T
-# Make:		GNU Make 3.82
+# For building: ALL_T
+# make version:	GNU Make 3.82
+# g++ version:	gcc version 4.5.1
+# gcc version:	g++ version 4.5.1
 ################################################################
+
+#### === CHANGE THE SETTINGS BELOW TO SUIT YOUR ENVIRONMENT === ####
+
+# ENTRANCE
+ENTRANCE	= none
 
 ########## Compiler, tools and options
 
@@ -26,15 +33,30 @@ MYCFLAGS	=
 MYLDFLAGS	=
 MYLIBS		=
 
+# == END SETTINGS -- NO NEED TO CHANGE ANYTHING BELOW THIS LINE == #
+
 # all target
 ALL_T		= fork thread example print create sample join \
-			  hello_arg1 myhello1 hello_arg2 myhello2
+			  hello_arg1 myhello1 hello_arg2 myhello2 stack self \
+			  dotprod_serial dotprod_mutex 
+
 # all object
 ALL_OBJ		= *.o
+
+# Targets start here
+default:	$(ENTRANCE)
 
 all:	$(ALL_T)
 
 # link object
+dotprod_mutex: dotprod_mutex.o
+	$(CC) $(LIBS) dotprod_mutex.o -o dotprod_mutex
+dotprod_serial: dotprod_serial.o
+	$(CC) $(LIBS) dotprod_serial.o -o dotprod_serial
+self: self.o
+	$(CC) $(LIBS) self.o -o self
+stack: stack.o
+	$(CC) $(LIBS) stack.o -o stack
 fork: fork.o
 	$(CC) fork.o -o fork
 thread: thread.o
@@ -59,6 +81,14 @@ myhello2: myhello2.o
 	$(CC) $(LIBS) myhello2.o -o myhello2
 
 # compile , but not link
+dotprod_mutex.o: dotprod_mutex.c
+	$(CC) -c $(CFLAGS) $(INCPATH) -o dotprod_mutex.o dotprod_mutex.c
+dotprod_serial.o: dotprod_serial.c
+	$(CC) -c $(CFLAGS) $(INCPATH) -o dotprod_serial.o dotprod_serial.c
+self.o: self.c
+	$(CC) -c $(CFLAGS) $(INCPATH) -o self.o self.c
+stack.o: stack.c
+	$(CC) -c $(CFLAGS) $(INCPATH) -o stack.o stack.c
 fork.o:	fork.c
 	$(CC) -c $(CFLAGS) $(INCPATH) -o fork.o fork.c
 thread.o: thread.c
@@ -82,6 +112,10 @@ hello_arg2.o: hello_arg2.c
 myhello2.o: myhello2.c
 	$(CC) -c $(CFLAGS) $(INCPATH) -o myhello2.o myhello2.c
 
-.PHONY: clean
+none:
+	@echo "Please do 'make OPTIONS' wehre OPTIONS is one of these:"
+	@echo "	$(ALL_T) all"
+
+.PHONY: clean default none
 clean:
 	$(RM) $(ALL_OBJ) $(ALL_T)
