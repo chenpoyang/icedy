@@ -1,0 +1,8 @@
+Default stack size = 8388608
+Amount of stack needed per thread = 9000000
+Creating threads with stack size = 9000000 bytes
+Thread 0: stack size = 9000000 bytes 
+Thread 1: stack size = 9000000 bytes 
+Created 4 threads.
+Thread 2: stack size = 9000000 bytes 
+Thread 3: stack size = 9000000 bytes 
