@@ -38,7 +38,8 @@ MYLIBS		=
 # all target
 ALL_T		= fork thread example print create sample join \
 			  hello_arg1 myhello1 hello_arg2 myhello2 stack self \
-			  dotprod_serial dotprod_mutex mutex print_num
+			  dotprod_serial dotprod_mutex mutex print_num condvar \
+			  wait cond
 
 # all object
 ALL_OBJ		= *.o
@@ -49,6 +50,12 @@ default:	$(ENTRANCE)
 all:	$(ALL_T)
 
 # link object
+cond: cond.o
+	$(CC) $(LIBS) cond.o -o cond
+wait: wait.o
+	$(CC) $(LIBS) wait.o -o wait
+condvar: condvar.o
+	$(CC) $(LIBS) condvar.o -o condvar
 print_num: print_num.o
 	$(CC) $(LIBS) print_num.o -o print_num
 mutex: mutex.o
@@ -85,6 +92,12 @@ myhello2: myhello2.o
 	$(CC) $(LIBS) myhello2.o -o myhello2
 
 # compile , but not link
+cond.o: cond.c
+	$(CC) -c $(CFLAGS) $(INCPATH) -o cond.o cond.c
+wait.o: wait.c
+	$(CC) -c $(CFLAGS) $(INCPATH) -o wait.o wait.c
+condvar.o: condvar.c
+	$(CC) -c $(CFLAGS) $(INCPATH) -o condvar.o condvar.c
 print_num.o: print_num.c
 	$(CC) -c $(CFLAGS) $(INCPATH) -o print_num.o print_num.c
 mutex.o: mutex.c
