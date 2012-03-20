@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
-#define BEGIN 1
+#define BEGIN 0
 #define END 100
 
 /* Define globally accessible variables and a mutex */
@@ -13,13 +13,18 @@ pthread_mutex_t mutex_num;
 /* thread entrance with arguments: args */
 void *run(void *args)
 {
-	printf("sub thread start!");
-	while (num <= END)
+	while (num < END)
 	{
 		pthread_mutex_lock(&mutex_num);
-		printf("thread %d: %d\r\n", (int)args, ++num);
+		if (num < END)
+		{
+			printf("subthread %d: %d\r\n", (int)args, ++num);
+		}
 		pthread_mutex_unlock(&mutex_num);
 	}
+
+	printf("subthread finished!\r\n");
+	pthread_exit(NULL);
 }
 
 int main(int argc, char *argv[])
@@ -33,11 +38,9 @@ int main(int argc, char *argv[])
 	/* initialise thread attribute */
 	pthread_attr_init(&attr);
 	/* set attribite joinable */
-	pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINALBE);
+	pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
 
-	printf("main thread start!");
 	id = 10;
-	printf("creating subthread %d\r\n", id);
 	ret = pthread_create(&thrd, &attr, run, (void *)id);
 	if (ret)
 	{
@@ -45,15 +48,20 @@ int main(int argc, char *argv[])
 		exit(-1);
 	}
 
-	while (num <= END)
+	num = BEGIN;
+	while (num < END)
 	{
 		pthread_mutex_lock(&mutex_num);
-		printf("thread %d: %d\r\n", id, ++num);
+		if (num < END)
+		{
+			printf("main thread: %d\r\n", ++num);
+		}
 		pthread_mutex_unlock(&mutex_num);
 	}
 	pthread_mutex_destroy(&mutex_num);
 	pthread_attr_destroy(&attr);
-	ret = pthread_join(thrd, NULL);
+	printf("mainthread finished!\r\n");
+	pthread_exit(NULL);
 	
 	return 0;
 }
