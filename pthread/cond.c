@@ -114,8 +114,6 @@ void *watch_count(void *args)
 	pthread_exit(NULL);
 }
 
-void *watch_count(void *args);
-/* timestamp the thread wait */
 /* timestamp the thread wait */
 void thread_wait(const int sec)
 {
