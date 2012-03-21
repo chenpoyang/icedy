@@ -5,6 +5,7 @@
 
 #define NUM_THREADS 3
 #define LIMIT		12
+#define TCOUNT		10
 #define ADD_COUNT	125
 pthread_t thrd[NUM_THREADS];
 pthread_mutex_t mutex;
@@ -51,7 +52,7 @@ int main(int argc, char *argv[])
 		}
 	}
 
-	printf("Main(): Waited on %d threads. Final value of count = %d.Done!", 
+	printf("Main(): Waited on %d threads. Final value of count = %d.Done!\r\n", 
 			NUM_THREADS, count);
 	pthread_attr_destroy(&attr);
 	pthread_mutex_destroy(&mutex);
@@ -63,25 +64,28 @@ int main(int argc, char *argv[])
 /* a thread function for accumulating count */
 void *inc_count(void *args)
 {
-	int id;
+	int id, i;
 
 	id = (int)args;
-
-	pthread_mutex_lock(&mutex);
-
-	++count;
-	if (count == LIMIT)
+	for (i = 0; i < TCOUNT; ++i)
 	{
-		printf("inc_count(): thread %d, count = %d Threadhold reached.", 
+		pthread_mutex_lock(&mutex);
+	
+		++count;
+		if (count == LIMIT)
+		{
+			printf("inc_count(): thread %d, count = %d Threadhold reached.", 
+					id, count);
+			pthread_cond_signal(&cond);
+			printf("Just send signal!\n");
+		}
+		printf("inc_count(): thread %d, count = %d, unlocking mutex\r\n", 
 				id, count);
-		pthread_cond_signal(&cond);
-		printf("Just send signal!\n");
+	
+		pthread_mutex_unlock(&mutex);
+		thread_wait(2);
 	}
-	printf("inc_count(): thread %d, count = %d, unlocking mutex\r\n", 
-			id, count);
-
-	pthread_mutex_unlock(&mutex);
-	thread_wait(1);
+	pthread_exit(NULL);
 }
 
 /* a thread function for changing the count while the condition is true */
@@ -96,17 +100,18 @@ void *watch_count(void *args)
 
 	if (count < LIMIT)
 	{
-		printf("watch_count(): thread %d is going into wait...", id);
+		printf("watch_count(): thread %d is going into wait...\r\n", id);
 		/* block there waiting for condition(count >= LIMIT), and then unlock */
 		pthread_cond_wait(&cond, &mutex);
 		/* got the lock */
-		printf("watch_count(): thread %d condition signal received!", id);
+		printf("watch_count(): thread %d condition signal received!\r\n", id);
 		count += ADD_COUNT;
 		printf("watch count(): thread %d count now = %d\r\n", 
-				id, ADD_COUNT);
+				id, count);
 	}
 
 	pthread_mutex_unlock(&mutex);
+	pthread_exit(NULL);
 }
 
 void *watch_count(void *args);
