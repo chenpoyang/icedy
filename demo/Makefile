@@ -1,9 +1,9 @@
-################################################################
+####################################################################
 # For building: ALL_T
 # make version:	GNU Make 3.82
 # g++ version:	gcc version 4.5.1
 # gcc version:	g++ version 4.5.1
-################################################################
+####################################################################
 
 #### === CHANGE THE SETTINGS BELOW TO SUIT YOUR ENVIRONMENT === ####
 
@@ -11,16 +11,14 @@
 ENTRANCE	= none
 
 ########## Compiler, tools and options
-
 CC			= gcc
 CXX			= g++
-# DEFINES		= -DNO_DEBUG
-DEFINES		=
+DEFINES		= -DMY_DEBUG
 CFLAGS		= -O2 -Wall -g $(DEFINES)
 CXXFLAGS	= -O2 -Wall -g $(DEFINES)
 INCPATH		= -I.
 LDFLAGS		= $(SYSLDFLAGS) $(MYLDFLAGS)
-LIBS		= $(SYSLIBS) $(MYLIBS)
+LIBS		= -l$(SYSLIBS) $(MYLIBS)
 RM			= rm -f
 
 # system options
@@ -36,44 +34,45 @@ MYLIBS		=
 # == END SETTINGS -- NO NEED TO CHANGE ANYTHING BELOW THIS LINE == #
 
 # all target
-ALL_C_T		= access quotearg
-
-ALL_CXX_T	=
-
-ALL_T		= $(ALL_C_T) $(ALL_CXX_T)
+ALL_T		= index signal setjump raise
 
 # all object
-ALL_C_OBJ	= access.o quotearg.o
-
-ALL_CXX_OBJ	=
-
-ALL_OBJ		= $(ALL_C_OBJ) $(ALL_CXX_OBJ)
+ALL_OBJ		= *.o
 
 # Targets start here
 default:	$(ENTRANCE)
 
 all:	$(ALL_T)
 
-## compile , but not link
-#$(ALL_C_OBJ): %.o : %.c
-#	$(CC) $(CFLAGS) $(INCPATH)  -c $< -o $@
-#$(ALL_CXX_OBJ): %.o : %.cpp
-#	$(CXX) $(CXXFLAGS) $(INCPATH)  -c $< -o $@
+# link
+raise: raise.o
+	$(CC) -o raise raise.o
+setjump: setjump.o
+	$(CC) -o setjump setjump.o
+signal: signal.o
+	$(CC) -o signal signal.o
+index: index.o
+	$(CC) -o index index.o
 
-# link object
-$(ALL_C_T): % : %.o
-	$(CC) $(CFLAGS) $(LDFLAGS) $< $(LIBS) -o $@
-$(ALL_CXX_T): % : %.o
-	$(CXX) $(CXXFLAGS) $(LDFLAGS) $< $(LIBS) -o $@
+# compile
+raise.o: raise.c
+	$(CC) $(CFLAGS) $(INCPATH)	-c -o raise.o raise.c
+setjump.o: setjump.c
+	$(CC) $(CFLAGS) $(INCPATH)	-c -o setjump.o setjump.c
+signal.o: signal.c
+	$(CC) $(CFLAGS) $(INCPATH)	-c -o signal.o signal.c
+index.o: index.c
+	$(CC) $(CFLAGS) $(INCPATH)	-c -o index.o index.c
 
+
+# pseudo target
+.PHONY: clean default none
+
+# make entrance with no options
 none:
 	@echo "Please do 'make OPTIONS' wehre OPTIONS is one of these:"
 	@echo "	$(ALL_T) all"
 
-.PHONY: clean default none all
+# clean
 clean:
 	$(RM) $(ALL_OBJ) $(ALL_T)
-
-# do not delete
-access.o	: access.c
-quotearg.o	: quotearg.c
