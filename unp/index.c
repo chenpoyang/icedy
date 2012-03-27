@@ -1,9 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <errno.h>
 
 #include <arpa/inet.h>
 #include <sys/socket.h>
+#include <sys/syslog.h>
 
 #define bzero(ptr,n) memset(ptr,0,n)
 
@@ -23,7 +25,8 @@ int main(int argc, char *argv[])
 
 	puts(str);
 	bzero(str,sizeof(str));
-	puts(str);
+
+	errno = strerrno(1);
 
 	return 0;
 }
