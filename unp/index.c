@@ -26,7 +26,5 @@ int main(int argc, char *argv[])
 	puts(str);
 	bzero(str,sizeof(str));
 
-	errno = strerrno(1);
-
 	return 0;
 }

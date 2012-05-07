@@ -39,14 +39,14 @@ MYLIBS		=
 # == END SETTINGS -- NO NEED TO CHANGE ANYTHING BELOW THIS LINE == #
 
 # all target
-ALL_C_T		= index
+ALL_C_T		= index getip
 
 ALL_CXX_T	=
 
 ALL_T		= $(ALL_C_T) $(ALL_CXX_T)
 
 # all object
-ALL_C_OBJ	= index.o
+ALL_C_OBJ	= index.o getip.o
 
 ALL_CXX_OBJ	=
 
@@ -74,4 +74,5 @@ clean:
 	$(RM) $(ALL_OBJ) $(ALL_T)
 
 # do not delete
-index.o: index.c
+index.o		: index.c
+getip.o		: getip.c
