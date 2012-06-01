@@ -91,7 +91,7 @@ void *recv_thrd(void *arg)   /* server for client */
     {
         send(sock_fd, buf, sizeof(buf), 0);
     }
-    remove_clienet(sock_fd);
+    remove_client(sock_fd);
 
     pthread_exit(NULL);
 }
