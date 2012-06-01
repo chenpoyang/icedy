@@ -69,12 +69,13 @@ int main(int argc, char *argv[])
         printf("a client connected!\n");
         
         /* create server thread for a new client */
-        chk = pthread_create(cli_thrd + 0, &attr, recv_thrd, (void *)con_fd);
+        chk = pthread_create(cli_thrd + cli_que_len, &attr, recv_thrd, (void *)con_fd);
         if (chk)
         {
             printf("create thread error!");
             continue;
         }
+        ++cli_que_len;
     }
     close(sock_fd);
 
@@ -90,10 +91,16 @@ void *recv_thrd(void *arg)   /* server for client */
     {
         send(sock_fd, buf, sizeof(buf), 0);
     }
+    remove_clienet(sock_fd);
 
     pthread_exit(NULL);
 }
 
 void remove_client(const int client_id)    /* deal with client quit */
 {
+    int i;
+
+    for (i = 0; i < cli_que_len; ++i)
+    {
+    }
 }
