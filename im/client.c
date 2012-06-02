@@ -11,11 +11,11 @@
 
 static char buf[MAX_BUF_LEN];
 
-void *recv_thrd(void *arg); /* 接收线程 */
+void *recv_thrd(void *arg); /* 客户端接收信息线程 */
 
 int main(int argc, char *argv[])
 {
-    struct sockaddr_in cli;
+    struct sockaddr_in srv;
     int sock_fd, chk;
     pthread_t tid;
     pthread_attr_t attr;
@@ -32,17 +32,17 @@ int main(int argc, char *argv[])
         return -1;
     }
 
-    bzero(&cli, sizeof(cli));
-    cli.sin_family = AF_INET;
-    cli.sin_port = htons(atoi(argv[2])); /* port */
-    chk = inet_pton(AF_INET, argv[1], &cli.sin_addr); /* x.x.x.x to network ipaddr */
+    bzero(&srv, sizeof(srv));
+    srv.sin_family = AF_INET;
+    srv.sin_port = htons(atoi(argv[2])); /* port */
+    chk = inet_pton(AF_INET, argv[1], &srv.sin_addr); /* x.x.x.x to network ipaddr */
     if (chk < 0)
     {
         printf("illegal ip address!");
         return -1;
     }
 
-    chk = connect(sock_fd, (struct sockaddr *)&cli, sizeof(cli));
+    chk = connect(sock_fd, (struct sockaddr *)&srv, sizeof(srv));
     if (chk < 0)
     {
         printf("connect error!");
@@ -64,10 +64,11 @@ int main(int argc, char *argv[])
         send(sock_fd, buf, sizeof(buf), 0);
     }
 
+    close(sock_fd);
+
     chk = pthread_join(tid, NULL);
     pthread_attr_destroy(&attr);
 
-    close(sock_fd);
     
     return 0;
 }
@@ -79,7 +80,8 @@ void *recv_thrd(void *arg) /* 接收线程 */
 
     while ((rec_bytes = recv(sock_fd, buf, sizeof(buf), 0)) > 0)
     {
-        puts(buf);
+        buf[rec_bytes] = '\0';
+        printf("\r%s", buf);
     }
     
     pthread_exit(NULL);

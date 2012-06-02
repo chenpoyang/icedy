@@ -11,4 +11,6 @@ void bzero(void *base, unsigned int size);
 
 void m_tolower(char *str);
 
+void thread_wait(const int sec);
+
 #endif /* __GLOBAL_H__ */
