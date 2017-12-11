@@ -1,10 +1,8 @@
-//
 //  main.m
 //  prog
 //
 //  Created by Peck Chen on 28/11/2016.
 //  Copyright © 2016 peck.chen. All rights reserved.
-//
 
 #import <Foundation/Foundation.h>
 #import "Complex.h"
