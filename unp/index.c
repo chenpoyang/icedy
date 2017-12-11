@@ -7,8 +7,6 @@
 #include <sys/socket.h>
 #include <sys/syslog.h>
 
-#define bzero(ptr,n) memset(ptr,0,n)
-
 int main(int argc, char *argv[])
 {
 	struct sockaddr_in addr;
