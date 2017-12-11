@@ -13,4 +13,3 @@
 -(void) setWidth: (int) w andHeight: (int) h;
 
 @end
- 
