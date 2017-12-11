@@ -1,0 +1,4 @@
+*.o
+objc/TAGS
+objc/index
+objc/main
