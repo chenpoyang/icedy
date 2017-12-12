@@ -1,1 +1,3 @@
 text from d.txt
+new line
+another new line
