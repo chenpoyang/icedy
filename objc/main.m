@@ -16,7 +16,7 @@
 #import "AddressBook.h"
 #import "NSSet+Printing.h"
 
-int gGlobalVar = 5;
+int gGlobalVar = 10;
 
 int main(int argc, const char * argv[])
 {
@@ -102,20 +102,20 @@ int main(int argc, const char * argv[])
 
 		// responsTo:
 		if ([square respondsToSelector: @selector(setSide:)] == YES)
-	NSLog(@"square responds to setSide: method");
+            NSLog(@"square responds to setSide: method");
 
 		if ([square respondsToSelector: @selector(setWidth:andHeight:)] == YES)
-   NSLog(@"square responds to setWidth:andWidth method");
+            NSLog(@"square responds to setWidth:andWidth method");
 
 		if ([square respondsToSelector: @selector(alloc)] == YES)
 			NSLog(@"square responds to alloc method");
 
 		// instanceRespondTo:
 		if ([Rectangle instancesRespondToSelector: @selector(setSide:)] == YES)
-NSLog(@"Instances of Rectangle respond to setSide: method");
+            NSLog(@"Instances of Rectangle respond to setSide: method");
 
 		if ([Square instancesRespondToSelector: @selector(setSide:)] == YES)
-NSLog(@"Instances of Square respond to setSide: method");
+            NSLog(@"Instances of Square respond to setSide: method");
 
 		if ([Square isSubclassOfClass: [Rectangle class]] == YES)
 			NSLog(@"Square is a subclass of a rectangle");
@@ -259,7 +259,7 @@ NSLog(@"Instances of Square respond to setSide: method");
 		// 从另一个字符串中查找一个字符串
 		subRange = [str1 rangeOfString: @"string A"];
 		NSLog(@"String is at index %lu, length is %lu",
-				subRange.location, subRange.length);
+              subRange.location, subRange.length);
 
 		subRange = [str1 rangeOfString: @"string B"];
 
@@ -267,7 +267,7 @@ NSLog(@"Instances of Square respond to setSide: method");
 			NSLog(@"String not found");
 		else
 			NSLog(@"String is at index %lu, length is %lu",
-					subRange.location, subRange.length);
+                  subRange.location, subRange.length);
 
 		NSLog(@"Original string: %@", str1);
 		NSLog(@"Original string: %@", str2);
