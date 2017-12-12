@@ -16,7 +16,7 @@
 #import "AddressBook.h"
 #import "NSSet+Printing.h"
 
-int gGlobalVar = 10;
+int gGlobalVar = 5;
 
 int main(int argc, const char * argv[])
 {
@@ -102,20 +102,20 @@ int main(int argc, const char * argv[])
 
 		// responsTo:
 		if ([square respondsToSelector: @selector(setSide:)] == YES)
-            NSLog(@"square responds to setSide: method");
+	NSLog(@"square responds to setSide: method");
 
 		if ([square respondsToSelector: @selector(setWidth:andHeight:)] == YES)
-            NSLog(@"square responds to setWidth:andWidth method");
+   NSLog(@"square responds to setWidth:andWidth method");
 
 		if ([square respondsToSelector: @selector(alloc)] == YES)
 			NSLog(@"square responds to alloc method");
 
 		// instanceRespondTo:
 		if ([Rectangle instancesRespondToSelector: @selector(setSide:)] == YES)
-            NSLog(@"Instances of Rectangle respond to setSide: method");
+NSLog(@"Instances of Rectangle respond to setSide: method");
 
 		if ([Square instancesRespondToSelector: @selector(setSide:)] == YES)
-            NSLog(@"Instances of Square respond to setSide: method");
+NSLog(@"Instances of Square respond to setSide: method");
 
 		if ([Square isSubclassOfClass: [Rectangle class]] == YES)
 			NSLog(@"Square is a subclass of a rectangle");
