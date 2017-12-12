@@ -4,3 +4,4 @@ another new line
 line 4
 a new line
 line 6
+add a new line
