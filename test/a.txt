@@ -1,2 +1,0 @@
-text from a.txt
-a new line in a.txt
