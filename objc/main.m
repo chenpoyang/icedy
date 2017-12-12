@@ -576,5 +576,5 @@ int main(int argc, const char * argv[])
 		NSLog(@"%@", [NSString stringWithContentsOfFile: @"newfile2" encoding: NSUTF8StringEncoding error: NULL]);
 	}
 
-	return 0;
+    return 0;
 }
