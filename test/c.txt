@@ -1,2 +1,0 @@
-new file c.txt
-add line

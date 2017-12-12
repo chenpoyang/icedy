@@ -1,3 +1,0 @@
-text from b.txt
-a new line
-another new line
